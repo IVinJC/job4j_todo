@@ -46,7 +46,6 @@ public class TaskRepo {
         return done;
     }
 
-//новая задача, если время прошло меньше часа со времени создания
     public List<Task> findAllNew() {
         Session session = sf.openSession();
         session.beginTransaction();
