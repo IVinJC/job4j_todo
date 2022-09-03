@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public class TaskRepo {
+
     private final SessionFactory sf;
 
     public TaskRepo(SessionFactory sf) {
