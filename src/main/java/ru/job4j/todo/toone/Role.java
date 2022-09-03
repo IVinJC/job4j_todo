@@ -1,4 +1,4 @@
-package ru.job4j.toone;
+package ru.job4j.todo.toone;
 
 import javax.persistence.*;
 import java.util.Objects;

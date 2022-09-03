@@ -1,5 +1,6 @@
-package ru.job4j.toone;
+package ru.job4j.todo.toone;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -30,16 +31,19 @@ public class HbmRun {
         Session session = sf.openSession();
         session.beginTransaction();
         session.save(model);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.close();
+        } catch (HibernateException e) {
+            Throwable ex = new Throwable(e);
+            ex.printStackTrace();
+        }
         return model;
     }
 
-    public static <T> List<T> findAll(Class<T> cl, SessionFactory sf) {
+    public static <T> List<T> findAll(Class<T> cl, SessionFactory sf) throws HibernateException {
         Session session = sf.openSession();
         session.beginTransaction();
         List<T> list = session.createQuery("from " + cl.getName(), cl).list();
-        session.getTransaction().commit();
         session.close();
         return list;
     }
