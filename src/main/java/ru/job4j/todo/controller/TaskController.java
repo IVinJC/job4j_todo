@@ -10,6 +10,7 @@ import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
@@ -22,7 +23,10 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("task") Task task) {
+    public String create(@ModelAttribute("task") Task task, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        task.setUser(user);
         task.setCreated(LocalDateTime.now());
         taskService.create(task);
         return "redirect:/";

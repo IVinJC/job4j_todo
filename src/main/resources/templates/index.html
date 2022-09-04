@@ -45,6 +45,7 @@
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">Задание</th>
+                <th scope="col">Пользователь</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Состояние</th>
             </tr>
@@ -55,6 +56,9 @@
                 <td>
                     <!--<a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.id + '. ' + post.name}">Post name</a>-->
                     <a th:href="@{|/description/${task.id}|}" th:text="${task.name}">Task name</a>
+                </td>
+                <td>
+                    <a th:text="${task.user.name}">User depends on task</a>
                 </td>
                 <td th:text="${task.created}"></td>
                 <td>
