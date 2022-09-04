@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class TaskRepo {
+public class TaskDbStore {
 
     private final SessionFactory sf;
 
-    public TaskRepo(SessionFactory sf) {
+    public TaskDbStore(SessionFactory sf) {
         this.sf = sf;
     }
 
@@ -21,7 +21,6 @@ public class TaskRepo {
         Session session = sf.openSession();
         session.beginTransaction();
         session.save(task);
-        session.getTransaction().commit();
         session.close();
         return task;
     }

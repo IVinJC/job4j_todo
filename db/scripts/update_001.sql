@@ -6,4 +6,9 @@ CREATE TABLE if not exists task (
                        done BOOLEAN
 );
 
-insert into task(name, description, created, done) values ('name', 'desc', null, false)
+create table if not exists users(
+                                    id SERIAL PRIMARY KEY,
+                                    name varchar(30),
+                                    email varchar(250) unique ,
+                                    password varchar(250)
+);

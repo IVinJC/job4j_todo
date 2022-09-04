@@ -16,7 +16,8 @@
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <mapping class="ru.job4j.todo.toone.Role" />
-        <mapping class="ru.job4j.todo.toone.User" />
+        <mapping class="ru.job4j.todo.toone.UserTask" />
         <mapping class="ru.job4j.todo.model.Task" />
+        <mapping class="ru.job4j.todo.model.User" />
     </session-factory>
 </hibernate-configuration>

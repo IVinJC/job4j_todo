@@ -8,8 +8,19 @@
 *     Bootstrap
 *     Hibernate
 *     PostgreSql
+Функциональные возможности приложения:
+Страница входа:
+*     Вход
+*     Переход к регистрации
+![img.png](src/main/java/ru/job4j/todo/images/login.png)
+Страница регистрации:
+* Имя пользователя
+* Логин (email) должен быть уникальным
+* Пароль
+![img.png](src/main/java/ru/job4j/todo/images/reg.png)
+
 В таблице отображается название, дата создания и состояние (выполнено или нет)
-![img.png](img.png)
+![img.png](src/main/java/ru/job4j/todo/images/img.png)
 На странице со списком
 * Кнопка "Добавить задание"
 Ссылки:
@@ -21,4 +32,4 @@
 * Выполнено - перевод в статус "Выполнено"
 * Отредактировать
 * Удалить
-![img_1.png](img_1.png)
+![img_1.png](src/main/java/ru/job4j/todo/images/img_1.png)

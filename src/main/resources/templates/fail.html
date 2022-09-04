@@ -21,20 +21,9 @@
     <title>TODO list</title>
 </head>
 <body>
-<a class="nav-item nav-link" th:if="${user.email == 'Гость'}" th:href="@{/loginPage}">
-    <span th:text="${user.email}"></span>
-    <span> | Войти</span>
-</a>
-<a class="nav-item nav-link" th:if="${user.email != 'Гость'}" th:href="@{/logout}">
-    <span th:text="${user.email}"></span>
-    <span> | Выйти</span>
-</a>
-<nav><a th:href="@{/index}">    Все задания</a> |
-    <a th:href="@{/done}">Выполненные задания</a> |
-    <a th:href="@{/new}">Новые задания</a></nav>
-    <hr>
-    <a class="nav-item nav-link" th:href="@{/newtask}">Добавить задание</a>
-
+<nav><a th:href="@{/registration}">Регистрация</a> |
+    <a th:href="@{/loginPage}">Вход</a></nav>
+<hr>
 <div class="container mt-3">
     <div class="row">
         <h4>TODO list</h4>
@@ -43,26 +32,9 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">№</th>
-                <th scope="col">Задание</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Состояние</th>
+                <th scope="col">Пользователь с такой почтой существует <a th:href="@{/registration}">Введите уникальный email</a></th>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="task : ${tasks}">
-                <td th:text="${task.id}"></td>
-                <td>
-                    <!--<a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.id + '. ' + post.name}">Post name</a>-->
-                    <a th:href="@{|/description/${task.id}|}" th:text="${task.name}">Task name</a>
-                </td>
-                <td th:text="${task.created}"></td>
-                <td>
-                    <span th:if="${task.done}">Выполнено</span>
-                    <span th:if="${!task.done}">Не выполнено</span>
-                </td>
-            </tr>
-            </tbody>
         </table>
     </div>
 </div>

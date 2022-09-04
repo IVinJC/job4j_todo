@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "j_user")
-public class User {
+public class UserTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,11 +15,11 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public static User of(String name, Role role) {
-        User user = new User();
-        user.name = name;
-        user.role = role;
-        return user;
+    public static UserTask of(String name, Role role) {
+        UserTask userTask = new UserTask();
+        userTask.name = name;
+        userTask.role = role;
+        return userTask;
     }
 
     public int getId() {
@@ -54,8 +54,8 @@ public class User {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        User user = (User) o;
-        return id == user.id;
+        UserTask userTask = (UserTask) o;
+        return id == userTask.id;
     }
 
     @Override
