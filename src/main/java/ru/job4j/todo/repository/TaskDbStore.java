@@ -7,6 +7,7 @@ import ru.job4j.todo.model.Task;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Function;
 
 @Repository
 public class TaskDbStore {
@@ -18,77 +19,63 @@ public class TaskDbStore {
     }
 
     public Task create(Task task) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        session.save(task);
-        session.close();
+        tx(session -> session.save(task));
         return task;
     }
 
     public List<Task> findAll() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List<Task> list = session.createQuery("from ru.job4j.todo.model.Task order by id asc", Task.class)
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
-        return list;
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.Task order by id asc", Task.class)
+                .getResultList());
     }
 
     public List<Task> findAllDone() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List<Task> done = session.createQuery("from Task t where t.done = :fDone order by id asc", Task.class)
+        return tx(session -> session.createQuery("from Task t where t.done = :fDone order by id asc", Task.class)
                 .setParameter("fDone", true)
-                .list();
-        session.getTransaction().commit();
-        session.close();
-        return done;
+                .list());
     }
 
     public List<Task> findAllNew() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List<Task> newList = session.createQuery(
-                "from Task t where EXTRACT(EPOCH FROM (:fCreated - t.created)) < 3600 order by id asc", Task.class)
+        return tx(session -> session.createQuery(
+                        "from Task t where EXTRACT(EPOCH FROM (:fCreated - t.created)) < 3600 order by id asc", Task.class)
                 .setParameter("fCreated", LocalDateTime.now())
-                .list();
-        session.getTransaction().commit();
-        session.close();
-        return newList;
+                .list());
     }
 
     public Task findById(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Task task = session.createQuery("from Task t where t.id = :fId", Task.class)
-                .setParameter("fId", id).getSingleResult();
-        session.getTransaction().commit();
-        session.close();
-        return task;
+        return tx(session -> session.createQuery("from Task t where t.id = :fId", Task.class)
+                .setParameter("fId", id).getSingleResult());
     }
 
     public Task update(int id, Task task) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Task taskUpdated = session.get(Task.class, id);
+        Task taskUpdated = tx(session -> session.get(Task.class, id));
         taskUpdated.setName(task.getName());
         taskUpdated.setDescription(task.getDescription());
         taskUpdated.setCreated(LocalDateTime.now());
         taskUpdated.setDone(task.isDone());
-        session.save(taskUpdated);
-        session.getTransaction().commit();
-        session.close();
+        tx(session -> session.merge(task));
         return task;
     }
 
     public void delete(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        session.createQuery("DELETE Task t WHERE t.id = :fId")
+        tx(session -> session.createQuery("DELETE Task t WHERE t.id = :fId")
                 .setParameter("fId", id)
-                .executeUpdate();
-        session.getTransaction().commit();
-        session.close();
+                .executeUpdate());
+    }
+
+    public <T> T tx(Function<Session, T> command) {
+        var session = sf.openSession();
+        try (session) {
+            var tx = session.beginTransaction();
+            T rsl = command.apply(session);
+            tx.commit();
+            session.close();
+            return rsl;
+        } catch (Exception e) {
+            var tx = session.getTransaction();
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        }
     }
 }
