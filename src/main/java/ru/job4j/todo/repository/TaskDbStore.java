@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Function;
 
@@ -19,15 +21,16 @@ public class TaskDbStore {
     }
 
     public Task create(Task task) {
+        task.getCreated().atZone(ZoneId.of("UTC+2"))
+                .format(DateTimeFormatter.ofPattern("HH:mm yyyy-MM-dd"));
         tx(session -> session.save(task));
         return task;
     }
 
     public List<Task> findAll() {
-        List<Task> tx = tx(session -> session.createQuery(
+        return tx(session -> session.createQuery(
                         "select distinct t from Task t join fetch t.categories order by t.id asc", Task.class)
                 .getResultList());
-        return tx;
     }
 
     public List<Task> findAllDone() {
@@ -56,6 +59,8 @@ public class TaskDbStore {
         Task taskUpdated = tx(session -> session.get(Task.class, id));
         taskUpdated.setName(task.getName());
         taskUpdated.setDescription(task.getDescription());
+        task.getCreated().atZone(ZoneId.of("UTC+2"))
+                .format(DateTimeFormatter.ofPattern("HH:mm yyyy-MM-dd"));
         taskUpdated.setCreated(LocalDateTime.now());
         taskUpdated.setDone(task.isDone());
         tx(session -> session.merge(task));
