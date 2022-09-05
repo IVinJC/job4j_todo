@@ -1,13 +1,16 @@
 package ru.job4j.todo.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +18,15 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 @Controller
+@RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
-
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+    private final CategoryService categoryService;
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("task") Task task, HttpServletRequest request) {
+    public String create(
+            @ModelAttribute("task") Task task,
+            HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         task.setUser(user);
@@ -33,7 +36,8 @@ public class TaskController {
     }
 
     @GetMapping("/newtask")
-    public String addTask(@ModelAttribute("task") Task task) {
+    public String addTask(@ModelAttribute("task") Task task, Model model) {
+        model.addAttribute("categories", categoryService.findAll());
         return "newtask";
     }
 

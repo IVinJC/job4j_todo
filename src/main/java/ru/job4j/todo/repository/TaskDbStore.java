@@ -24,25 +24,31 @@ public class TaskDbStore {
     }
 
     public List<Task> findAll() {
-        return tx(session -> session.createQuery("from ru.job4j.todo.model.Task order by id asc", Task.class)
+        List<Task> tx = tx(session -> session.createQuery(
+                        "select distinct t from Task t join fetch t.categories order by t.id asc", Task.class)
                 .getResultList());
+        return tx;
     }
 
     public List<Task> findAllDone() {
-        return tx(session -> session.createQuery("from Task t where t.done = :fDone order by id asc", Task.class)
+        return tx(session -> session.createQuery(
+                "select distinct t from Task t join fetch t.categories"
+                        + " where t.done = :fDone order by t.id asc", Task.class)
                 .setParameter("fDone", true)
                 .list());
     }
 
     public List<Task> findAllNew() {
         return tx(session -> session.createQuery(
-                        "from Task t where EXTRACT(EPOCH FROM (:fCreated - t.created)) < 3600 order by id asc", Task.class)
+                        "select distinct t from Task t join fetch t.categories "
+                                + "where EXTRACT(EPOCH FROM (:fCreated - t.created)) < 3600 order by t.id asc", Task.class)
                 .setParameter("fCreated", LocalDateTime.now())
                 .list());
     }
 
     public Task findById(int id) {
-        return tx(session -> session.createQuery("from Task t where t.id = :fId", Task.class)
+        return tx(session -> session.createQuery(
+                "select distinct t from Task t join fetch t.categories where t.id = :fId", Task.class)
                 .setParameter("fId", id).getSingleResult());
     }
 
@@ -62,7 +68,7 @@ public class TaskDbStore {
                 .executeUpdate());
     }
 
-    public <T> T tx(Function<Session, T> command) {
+    private <T> T tx(Function<Session, T> command) {
         var session = sf.openSession();
         try (session) {
             var tx = session.beginTransaction();

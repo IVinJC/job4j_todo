@@ -45,9 +45,10 @@
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">Задание</th>
-                <th scope="col">Пользователь</th>
+                <th scope="col">Категория</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Состояние</th>
+                <th scope="col">Автор</th>
             </tr>
             </thead>
             <tbody>
@@ -58,12 +59,17 @@
                     <a th:href="@{|/description/${task.id}|}" th:text="${task.name}">Task name</a>
                 </td>
                 <td>
-                    <a th:text="${task.user.name}">User depends on task</a>
+                    <div th:each="category : ${task.categories}">
+                         <span th:text="${category.name}"/>
+                    </div>
                 </td>
                 <td th:text="${task.created}"></td>
                 <td>
                     <span th:if="${task.done}">Выполнено</span>
                     <span th:if="${!task.done}">Не выполнено</span>
+                </td>
+                <td>
+                    <a th:text="${task.user.name}">User depends on task</a>
                 </td>
             </tr>
             </tbody>

@@ -30,6 +30,13 @@
         <legend>Описание: </legend>
         <textarea rows="10" cols="45" name="text" th:field="*{description}"></textarea><br>
     </fieldset>
+    <hr>
+    <div class="form-group">
+        <label for="categories">Категория:</label>
+        <select class="form-control" id="categories" multiple name="category.name" required th:field="*{categories}">
+            <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+        </select>
+    </div>
     <!--    <label for="name">Описание: </label>
         <input type="text" th:field="*{description}" id="description"/>-->
     <hr>
