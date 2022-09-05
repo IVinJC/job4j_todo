@@ -14,15 +14,15 @@ public class UserService {
         this.userDbStore = userDbStore;
     }
 
-    public User create(User user) {
+    public Optional<User> create(User user) {
         return userDbStore.create(user);
     }
 
     public Optional<User> findUserByEmail(String email) {
-        return Optional.of(userDbStore.findByEmail(email));
+        return userDbStore.findByEmail(email);
     }
 
     public Optional<User> findUserByEmailAndPwd(String email, String password) {
-        return Optional.ofNullable(userDbStore.findUserByEmailAndPwd(email, password));
+        return userDbStore.findUserByEmailAndPwd(email, password);
     }
 }

@@ -6,9 +6,21 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class AuthFilter implements Filter {
+    private final Set<String> mappingURI = ConcurrentHashMap.newKeySet();
+
+    private Boolean uriCheck(String uri) {
+        mappingURI.add("/loginPage");
+        mappingURI.add("/login");
+        mappingURI.add("/registration");
+        return mappingURI.contains(uri);
+    }
 
     @Override
     public void doFilter(
@@ -17,8 +29,7 @@ public class AuthFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String uri = req.getRequestURI();
-        if (uri.endsWith("loginPage") || uri.endsWith("login") || uri.endsWith("registration")) {
+        if (uriCheck(req.getRequestURI())) {
             chain.doFilter(req, res);
             return;
         }
