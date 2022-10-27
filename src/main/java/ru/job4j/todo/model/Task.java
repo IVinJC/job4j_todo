@@ -21,6 +21,7 @@ public class Task {
     private String description;
     @NonNull
     private LocalDateTime created;
+    private String dateFormat;
     @NonNull
     private boolean done;
     @ManyToOne

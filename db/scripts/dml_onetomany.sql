@@ -1,1 +1,0 @@
-alter table tasks add user_id int

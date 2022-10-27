@@ -5,9 +5,8 @@
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <include file="scripts/update_001.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/dml_onetomany.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/ddl_category_001.sql" relativeToChangelogFile="true"/>
     <include file="scripts/dml_002.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/ddl_category.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/dml_category.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/dml_category_003.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/dml_without_timezone_005.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

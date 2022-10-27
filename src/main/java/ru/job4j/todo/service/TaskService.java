@@ -7,10 +7,11 @@ import ru.job4j.todo.repository.TaskDbStore;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private final TaskDbStore taskDbStore;
 
     public TaskService(TaskDbStore taskDbStore) {
@@ -25,7 +26,10 @@ public class TaskService {
     }
 
     public List<Task> findAll() {
-        return taskDbStore.findAll();
+        return taskDbStore.findAll()
+                .stream()
+                .peek(task -> task.setDateFormat(task.getCreated().format(formatter)))
+                .collect(Collectors.toList());
     }
 
     public List<Task> findAllDone() {
